@@ -35,7 +35,7 @@ require_once ($CFG->dirroot.'/course/moodleform_mod.php');
 
         // get user groups
         list($groups, $str, $batch)= getUserGroups();
-        echo $username . "<br>" . $batch;
+        //echo $username . "<br>" . $batch;
 
         echo " <script type='text/javascript' src='myjs.js?version=3'></script>";
 

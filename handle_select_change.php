@@ -18,7 +18,7 @@ $sql= "select s.sessionid, concat((DATE_FORMAT(start_date, '%a %e %b %Y')), ' - 
     where s.max_students>= (select count(ss.sessionid) from mdl_summtrain_session_student as ss where ss.sessionid= s.sessionid)
     and s.institute= '{$value}'
     and s.year= '2023'    
-    and (s.max_students - (select count(ss.sessionid) from mdl_summtrain_session_student as ss where ss.sessionid= s.sessionid)) > 0" . $str . " ORDER BY start_date ASC";
+    and (s.max_students - (select count(ss.sessionid) from mdl_summtrain_session_student as ss where ss.sessionid= s.sessionid)) > 0" . $str . " ORDER BY s.start_date";
 $options= $DB->get_records_sql_menu($sql);
 header('Content-Type: application/json');
 echo json_encode($options);

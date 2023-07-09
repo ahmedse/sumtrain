@@ -12,8 +12,8 @@ $session = "";
 $results= [];
 
  // get user groups
- list($groups, $str)= getUserGroups();
- 
+ list($groups, $str, $batch)= getUserGroups();
+
  $sql= "select sessionid from mdl_summtrain_session_student as ss where ss.username='{$username}' and ss.year= '2023'";
  $res= $DB->get_records_sql($sql); 
  $exists= (count($res));
@@ -22,7 +22,7 @@ $results= [];
     
      //if already regsitered, show details
      $sessionid= array_keys($res)[0];
-     $sql= "select institute, concat((DATE_FORMAT(start_date, '%a %e %b %Y')), '- available:' 
+     $sql= "select institute, concat((DATE_FORMAT(start_date, '%a %e %b %Y')), ' - group:', s.institute_group, '- available:' 
         , (s.max_students - (select count(ss.sessionid) from mdl_summtrain_session_student as ss where ss.sessionid= s.sessionid)))
         as session
         from mdl_summtrain_session as s
