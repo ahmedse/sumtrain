@@ -11,6 +11,9 @@ $institute = "";
 $session = "";
 $results= [];
 
+ // get user groups
+ list($groups, $str)= getUserGroups();
+ 
  $sql= "select sessionid from mdl_summtrain_session_student as ss where ss.username='{$username}' and ss.year= '2023'";
  $res= $DB->get_records_sql($sql); 
  $exists= (count($res));

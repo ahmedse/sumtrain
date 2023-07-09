@@ -31,6 +31,8 @@ $sumtrain_COLUMN_HEIGHT = 300;
 global $sumtrain_COLUMN_WIDTH;
 $sumtrain_COLUMN_WIDTH = 300;
 
+
+
 define('sumtrain_PUBLISH_ANONYMOUS', '0');
 define('sumtrain_PUBLISH_NAMES',     '1');
 
@@ -44,6 +46,45 @@ define('sumtrain_DISPLAY_VERTICAL',    '1');
 
 define('sumtrain_EVENT_TYPE_OPEN', 'open');
 define('sumtrain_EVENT_TYPE_CLOSE', 'close');
+
+require_once($CFG->dirroot . '/group/lib.php');
+
+define('YEAR', '2023');
+define("BATCH1", "Cohort 2022-2027 cohort");
+define("BATCH2", "Cohort 2021-2026 cohort");
+
+function getUserGroups(){
+    global $COURSE, $DB, $USER;
+    $batch= 0;    
+
+    $groups= [];
+    $ret = groups_get_user_groups($COURSE->id, $USER->id);
+    $str= '';
+    foreach ($ret[0] as $id) {    
+        $g= groups_get_group_name($id);        
+        switch ($g) {
+            case BATCH1:
+                $batch= 1;
+                break;
+            case BATCH2:
+                $batch= 2;
+                break;           
+        }
+        if ($str> ""){
+            $str= $str . " OR FIND_IN_SET('{$g}', s.student_groups)";
+        }
+        else{
+            $str= " AND FIND_IN_SET('{$g}', s.student_groups)";
+        }
+        $groups[]= $g;
+    }    
+    return array($groups, $str, $batch);
+}
+
+
+
+
+
 
 /** @global array $sumtrain_PUBLISH */
 global $sumtrain_PUBLISH;

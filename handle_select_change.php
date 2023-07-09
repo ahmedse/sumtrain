@@ -8,15 +8,17 @@ $value = $_GET['value'];
 global $DB;
 $response = "You selected: " . $value; 
 
-$sql= "select s.sessionid, concat((DATE_FORMAT(start_date, '%a %e %b %Y')), '- available:' 
+ // get user groups
+ list($groups, $str)= getUserGroups();
+
+$sql= "select s.sessionid, concat((DATE_FORMAT(start_date, '%a %e %b %Y')), ' - group:', s.institute_group, ' - available:' 
     , (s.max_students - (select count(ss.sessionid) from mdl_summtrain_session_student as ss where ss.sessionid= s.sessionid)))
     as available_sessions
     from mdl_summtrain_session as s
     where s.max_students>= (select count(ss.sessionid) from mdl_summtrain_session_student as ss where ss.sessionid= s.sessionid)
     and s.institute= '{$value}'
-    and s.year= '2023'
-    and s.student_groups= 'Cohort 2022-2027'
-    and (s.max_students - (select count(ss.sessionid) from mdl_summtrain_session_student as ss where ss.sessionid= s.sessionid)) > 0";
+    and s.year= '2023'    
+    and (s.max_students - (select count(ss.sessionid) from mdl_summtrain_session_student as ss where ss.sessionid= s.sessionid)) > 0" . $str . " ORDER BY start_date ASC";
 $options= $DB->get_records_sql_menu($sql);
 header('Content-Type: application/json');
 echo json_encode($options);

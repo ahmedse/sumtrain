@@ -31,6 +31,12 @@ require_once ($CFG->dirroot.'/course/moodleform_mod.php');
         global $CFG, $sumtrain_SHOWRESULTS, $sumtrain_PUBLISH, $sumtrain_DISPLAY, $DB, $OUTPUT, $USER;
         $username = $USER->username;
 
+        
+
+        // get user groups
+        list($groups, $str, $batch)= getUserGroups();
+        echo $username . "<br>" . $batch;
+
         echo " <script type='text/javascript' src='myjs.js?version=3'></script>";
 
         $mform    =& $this->_form;
@@ -40,8 +46,8 @@ require_once ($CFG->dirroot.'/course/moodleform_mod.php');
         $sql= "select distinctrow i.instituteid, i.institute
             from mdl_summtrain_institute as i inner join mdl_summtrain_session as s
             on i.institute= s.institute 
-            and s.year= '2023'
-            and s.student_groups= 'Cohort 2022-2027'";
+            and s.year= '2023'" . $str;
+            // and FIND_IN_SET('Cohort 2022-2027', s.student_groups) > 0";
         $options= $DB->get_records_sql_menu($sql);  
 
         // add status area

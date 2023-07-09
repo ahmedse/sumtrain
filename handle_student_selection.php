@@ -12,7 +12,8 @@ $username = $USER->username;
 $institute = $_GET['institute'];
 $session = $_GET['session'];
 
-
+ // get user groups
+ list($groups, $str)= getUserGroups();
 // Do something with the selected value, such as update a database or generate a response
 
 // check if selection is still available, if not, return applogize.
@@ -21,8 +22,7 @@ $sql= "select s.max_students - (select count(ss.sessionid) from mdl_summtrain_se
     where s.max_students>= (select count(ss.sessionid) from mdl_summtrain_session_student as ss where ss.sessionid= s.sessionid)
     and s.institute= '{$institute}'
     and s.sessionid= {$session}
-    and s.year= '2023'
-    and s.student_groups= 'Cohort 2022-2027'";
+    and s.year= '2023'" . $str;
 $res= $DB->get_records_sql($sql);
 $available= array_keys($res)[0];
 
