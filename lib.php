@@ -53,12 +53,40 @@ define('YEAR', '2023');
 define("BATCH1", "Cohort 2022-2027 cohort");
 define("BATCH2", "Cohort 2021-2026 cohort");
 
-function getUserGroups(){
+function checkUserCohort(){
     global $COURSE, $DB, $USER;
+
+    $sql= "SELECT h.name
+        FROM mdl_cohort AS h
+        JOIN mdl_cohort_members AS hm ON h.id = hm.cohortid
+        JOIN mdl_user AS u ON hm.userid = u.id
+        WHERE u.id='{$USER->id}' and h.name in ('Cohort 2021-2026', 'Cohort 2022-2027')";
+
+    $ret= $DB->get_record_sql($sql);
+    if ($ret !== false) {
+        $cohort= $ret->name . ' cohort';
+    }
+    else
+    {
+        $cohort= '';
+    }
+
+    return $cohort;
+
+}
+
+function getUserGroups2(){
+    global $PAGE;
+    //$PAGE->set_course(177);
+
+    global $COURSE, $DB, $USER;
+
     $batch= 0;    
 
     $groups= [];
-    $ret = groups_get_user_groups($COURSE->id, $USER->id);
+    //$ret = groups_get_user_groups($COURSE->id, $USER->id);
+    // 177
+    $ret = groups_get_user_groups($COURSE->id, 4);
     $str= '';
     foreach ($ret[0] as $id) {    
         $g= groups_get_group_name($id);        
@@ -78,7 +106,7 @@ function getUserGroups(){
         }
         $groups[]= $g;
     }    
-    return array($groups, $str, $batch);
+    return array($PAGE->course->id, $str, $batch);
 }
 
 

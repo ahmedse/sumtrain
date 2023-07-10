@@ -50,8 +50,8 @@ function handleSelectChange() {
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             // Handle the response from the server
-            let response = JSON.parse(this.responseText);
-            console.log(response);     
+            var response = JSON.parse(this.responseText);
+            console.log(this.responseText);     
       
             var selectElement_session = document.getElementById('id_session');
             // remove all options
@@ -60,7 +60,9 @@ function handleSelectChange() {
             }
             
             // populate sessions
-            var options = response;
+            var options = response[1];
+            alert(response);
+            alert(options);
             
             for (var label in options) {
                 var value = options[label];

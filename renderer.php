@@ -34,10 +34,10 @@ require_once ($CFG->dirroot.'/course/moodleform_mod.php');
         
 
         // get user groups
-        list($groups, $str, $batch)= getUserGroups();
+        $cohort= checkUserCohort();
         //echo $username . "<br>" . $batch;
 
-        echo " <script type='text/javascript' src='myjs.js?version=3'></script>";
+        echo " <script type='text/javascript' src='myjs.js?version=5'></script>";
 
         $mform    =& $this->_form;
 
@@ -46,7 +46,8 @@ require_once ($CFG->dirroot.'/course/moodleform_mod.php');
         $sql= "select distinctrow i.instituteid, i.institute
             from mdl_summtrain_institute as i inner join mdl_summtrain_session as s
             on i.institute= s.institute 
-            and s.year= '2023'" . $str;
+            and s.student_groups= '{$cohort}'
+            and s.year= '2023'";
             // and FIND_IN_SET('Cohort 2022-2027', s.student_groups) > 0";
         $options= $DB->get_records_sql_menu($sql);  
 
